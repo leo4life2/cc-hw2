@@ -1,0 +1,62 @@
+.white {
+  background: #fff;
+  color: #000;
+  text-shadow: none;
+}
+
+.white a {
+  color: #000 !important;
+  text-shadow: none !important;
+}
+
+.white .active > a {
+  border-bottom-color: #000 !important;
+}
+
+.search-upload-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.search-input {
+  width: 100%;
+}
+
+#search-button {
+  margin-left: 5px;
+}
+
+#transcribe-button {
+  margin-left: 5px;
+}
+
+.upload-image {
+  display: flex;
+  align-items: center;
+  margin-right: 5px;
+}
+
+#upload-button {
+  margin-right: 5px;
+}
+.upload-headers{
+  width: 60%;
+}
+
+.photo-gallery {
+  max-height: calc(100vh - 150px); /* Adjust the value based on your layout */
+  overflow: auto;
+}
+
+.inner.scrollable-content {
+  max-height: calc(100vh - 120px); /* Adjust the value based on your layout */
+  overflow-y: auto;
+  padding-bottom: 20px; /* Add padding to the bottom for better scrolling experience */
+}

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="A simple photo displayer app.">
+    <meta name="author" content="Andrei Papancea">
+
+    <title>Photo Displayer</title>
+
+    <link href="./assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="./assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+    <link href="./assets/css/cover.css" rel="stylesheet">
+    <link href="./assets/css/main.css" rel="stylesheet">
+
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1049.0.min.js"></script>
+
+    <script src="./assets/js/sdk/lib/axios/dist/axios.standalone.js"></script>
+    <script src="./assets/js/sdk/lib/CryptoJS/rollups/hmac-sha256.js"></script>
+    <script src="./assets/js/sdk/lib/CryptoJS/rollups/sha256.js"></script>
+    <script src="./assets/js/sdk/lib/CryptoJS/components/hmac.js"></script>
+    <script src="./assets/js/sdk/lib/CryptoJS/components/enc-base64.js"></script>
+    <script src="./assets/js/sdk/lib/url-template/url-template.js"></script>
+    <script src="./assets/js/sdk/lib/apiGatewayCore/sigV4Client.js"></script>
+    <script src="./assets/js/sdk/lib/apiGatewayCore/apiGatewayClient.js"></script>
+    <script src="./assets/js/sdk/lib/apiGatewayCore/simpleHttpClient.js"></script>
+    <script src="./assets/js/sdk/lib/apiGatewayCore/utils.js"></script>
+
+    <script src="./assets/js/sdk/apigClient.js"></script>
+
+    <script src="./assets/js/aws-sdk.min.js"></script>
+
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <div class="site-wrapper white">
+      <div class="site-wrapper-inner">
+        <div class="cover-container">
+          <div class="masthead clearfix">
+            <div class="inner">
+              <h3 class="masthead-brand">Photo Displayer</h3>
+            </div>
+          </div>
+  
+          <div class="inner scrollable-content">
+            <div class="upload-image" style="margin-bottom: 10px;">
+              <button id="upload-button">Upload</button>
+              <input type="file" id="image-upload" accept="image/png, image/jpeg" />
+              <input type="text" class="upload-headers" id="upload-headers-input" placeholder="Labels?" />
+            </div>
+            <div class="search-bar" style="margin-bottom: 20px;">
+              <input type="text" class="search-input" id="search-input" placeholder="Search..." />
+              <button id="search-button">Search</button>
+              <button id="transcribe-button">Transcribe</button>
+            </div>
+            <div class="photo-gallery">
+              <div class="row" id="photo-container">
+                <!-- Images and labels will be displayed here -->
+              </div>
+            </div>
+          </div>          
+          
+        </div>
+      </div>
+    </div>
+
+    <script src="./assets/js/main.js"></script>
+    <!-- Bootstrap core JavaScript -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- <script>window.jQuery || document.write('<script src="./assets/js/vendor/jquery.min.js"><\/script>')</script> -->
+    <script src="./assets/js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="./assets/js/ie10-viewport-bug-workaround.js"></script>
+  </body>
+</html>
