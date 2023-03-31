@@ -3,12 +3,15 @@ version: 0.2
 phases:
   build:
     commands:
+      - echo "Zipping lambda1..."
+      - cd lambda && zip ../lambda1.zip LF1.py && cd ..
+      - echo "Zipping lambda2..."
+      - cd lambda && zip ../lambda2.zip search-photos.py && cd ..
+      - echo "Syncing frontend to s3..."
       - aws s3 sync ./frontend s3://cc-photos-frontend
-      - mkdir -p packages
-      - zip -r packages/lambda1.zip ./lambda/LF1.py
-      - zip -r packages/lambda2.zip ./lambda/search-photos.py
 
 artifacts:
   files:
-    - packages/lambda1.zip
-    - packages/lambda2.zip
+    - lambda1.zip
+    - lambda2.zip
+  discard-paths: yes
