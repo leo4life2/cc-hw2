@@ -1,0 +1,14 @@
+version: 0.2
+
+phases:
+  build:
+    commands:
+      - aws s3 sync ./frontend s3://cc-photos-frontend
+      - mkdir -p packages
+      - zip -r packages/lambda1.zip ./lambda/LF1.py
+      - zip -r packages/lambda2.zip ./lambda/search-photos.py
+
+artifacts:
+  files:
+    - packages/lambda1.zip
+    - packages/lambda2.zip
