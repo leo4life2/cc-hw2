@@ -13,10 +13,8 @@ Resources:
       Architectures: 
         - "x86_64"
       Code:
-        S3Bucket: !Select [0, !Split [ "/", !Fn::GetArtifactAtt: [LambdaArtifacts, ObjectKey]]]
-        S3Key: !Fn::Sub
-          - "${InputArtifactPrefix}/searchphotos.zip"
-          - { InputArtifactPrefix: !Select [1, !Split [ "/", !Fn::GetArtifactAtt: [LambdaArtifacts, ObjectKey]]] }
+        S3Bucket: !Select [0, !Split [ "/", !Fn::GetArtifactAtt: [SearchPhotosArtifact, ObjectKey]]]
+        S3Key: !Select [1, !Split [ "/", !Fn::GetArtifactAtt: [SearchPhotosArtifact, ObjectKey]]]
       MemorySize: 128
       Role: !Sub "arn:aws:iam::${AWS::AccountId}:role/service-role/search-photos-role-zte24uhw"
       Runtime: "python3.9"
@@ -42,10 +40,8 @@ Resources:
       Architectures: 
         - "x86_64"
       Code:
-        S3Bucket: !Select [0, !Split [ "/", !Fn::GetArtifactAtt: [LambdaArtifacts, ObjectKey]]]
-        S3Key: !Fn::Sub
-          - "${InputArtifactPrefix}/lf1.zip"
-          - { InputArtifactPrefix: !Select [1, !Split [ "/", !Fn::GetArtifactAtt: [LambdaArtifacts, ObjectKey]]] }
+        S3Bucket: !Select [0, !Split [ "/", !Fn::GetArtifactAtt: [LF1Artifact, ObjectKey]]]
+        S3Key: !Select [1, !Split [ "/", !Fn::GetArtifactAtt: [LF1Artifact, ObjectKey]]]
       MemorySize: 128
       Role: !Sub "arn:aws:iam::${AWS::AccountId}:role/service-role/LF1-role-9stq6gjn"
       Runtime: "python3.9"

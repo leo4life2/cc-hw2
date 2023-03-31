@@ -11,7 +11,11 @@ phases:
       - aws s3 sync ./frontend s3://cc-photos-frontend
 
 artifacts:
-  files:
-    - lf1.zip
-    - searchphotos.zip
-  discard-paths: yes
+  - name: LF1Artifact
+    files:
+      - lf1.zip
+    discard-paths: yes
+  - name: SearchPhotosArtifact
+    files:
+      - searchphotos.zip
+    discard-paths: yes
