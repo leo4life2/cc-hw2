@@ -9,13 +9,6 @@ phases:
       - cd lambda && zip ../searchphotos.zip search-photos.py && cd ..
       - echo "Syncing frontend to s3..."
       - aws s3 sync ./frontend s3://cc-photos-frontend
-
-artifacts:
-  - name: LF1Artifact
-    files:
-      - lf1.zip
-    discard-paths: yes
-  - name: SearchPhotosArtifact
-    files:
-      - searchphotos.zip
-    discard-paths: yes
+      - echo "Uploading Lambda zip files to s3..."
+      - aws s3 cp lf1.zip s3://codepipeline-us-east-1-763954990292/cc-hw2-cicd/lf1.zip
+      - aws s3 cp searchphotos.zip s3://codepipeline-us-east-1-763954990292/cc-hw2-cicd/searchphotos.zip

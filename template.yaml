@@ -13,8 +13,8 @@ Resources:
       Architectures: 
         - "x86_64"
       Code:
-        S3Bucket: !Select [0, !Split [ "/", !Fn::GetArtifactAtt: [SearchPhotosArtifact, ObjectKey]]]
-        S3Key: !Select [1, !Split [ "/", !Fn::GetArtifactAtt: [SearchPhotosArtifact, ObjectKey]]]
+        S3Bucket: codepipeline-us-east-1-763954990292
+        S3Key: cc-hw2-cicd/searchphotos.zip
       MemorySize: 128
       Role: !Sub "arn:aws:iam::${AWS::AccountId}:role/service-role/search-photos-role-zte24uhw"
       Runtime: "python3.9"
@@ -40,8 +40,8 @@ Resources:
       Architectures: 
         - "x86_64"
       Code:
-        S3Bucket: !Select [0, !Split [ "/", !Fn::GetArtifactAtt: [LF1Artifact, ObjectKey]]]
-        S3Key: !Select [1, !Split [ "/", !Fn::GetArtifactAtt: [LF1Artifact, ObjectKey]]]
+        S3Bucket: codepipeline-us-east-1-763954990292
+        S3Key: cc-hw2-cicd/lf1.zip
       MemorySize: 128
       Role: !Sub "arn:aws:iam::${AWS::AccountId}:role/service-role/LF1-role-9stq6gjn"
       Runtime: "python3.9"
@@ -87,6 +87,44 @@ Resources:
                     BucketKeyEnabled: true
             WebsiteConfiguration: 
                 IndexDocument: "chat.html"
+
+    S3Bucket3:
+        Type: "AWS::S3::Bucket"
+        Properties:
+            BucketName: !Sub "codepipeline-${AWS::Region}-763954990292"
+            BucketEncryption: 
+                ServerSideEncryptionConfiguration: 
+                  - 
+                    ServerSideEncryptionByDefault: 
+                        SSEAlgorithm: "AES256"
+                    BucketKeyEnabled: false
+
+    S3BucketPolicy:
+        Type: "AWS::S3::BucketPolicy"
+        Properties:
+            Bucket: !Ref S3Bucket3
+            PolicyDocument: 
+                Version: "2012-10-17"
+                Id: "SSEAndSSLPolicy"
+                Statement: 
+                  - 
+                    Sid: "DenyUnEncryptedObjectUploads"
+                    Effect: "Deny"
+                    Principal: "*"
+                    Action: "s3:PutObject"
+                    Resource: !Sub "arn:aws:s3:::${S3Bucket}/*"
+                    Condition: 
+                        StringNotEquals: 
+                            "s3:x-amz-server-side-encryption": "aws:kms"
+                  - 
+                    Sid: "DenyInsecureConnections"
+                    Effect: "Deny"
+                    Principal: "*"
+                    Action: "s3:*"
+                    Resource: !Sub "arn:aws:s3:::${S3Bucket}/*"
+                    Condition: 
+                        Bool: 
+                            "aws:SecureTransport": "false"
 
     ApiGatewayRestApi:
         DeletionPolicy: "Retain"
