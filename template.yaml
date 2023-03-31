@@ -3,7 +3,6 @@ Metadata:
     Generator: "former2"
 Description: ""
 Resources:
-Resources:
   LambdaFunction:
     DeletionPolicy: "Retain"
     Type: "AWS::Lambda::Function"
