@@ -9,12 +9,14 @@ Resources:
     Properties:
       Description: ""
       FunctionName: "search-photos"
-      Handler: "lambda_function.lambda_handler"
+      Handler: "search-photos.lambda_handler"
       Architectures: 
         - "x86_64"
       Code:
-        S3Bucket: "codepipeline-us-east-1-763954990292"
-        S3Key: !Join ["/", ["cc-hw2-cicd/LambdaArti", "lambda2.zip"]]
+        S3Bucket: !Select [0, !Split [ "/", !Fn::GetArtifactAtt: [LambdaArtifacts, ObjectKey]]]
+        S3Key: !Fn::Sub
+          - "${InputArtifactPrefix}/lambda2.zip"
+          - { InputArtifactPrefix: !Select [1, !Split [ "/", !Fn::GetArtifactAtt: [LambdaArtifacts, ObjectKey]]] }
       MemorySize: 128
       Role: !Sub "arn:aws:iam::${AWS::AccountId}:role/service-role/search-photos-role-zte24uhw"
       Runtime: "python3.9"
@@ -36,12 +38,14 @@ Resources:
     Properties:
       Description: ""
       FunctionName: "LF1"
-      Handler: "lambda_function.lambda_handler"
+      Handler: "LF1.lambda_handler"
       Architectures: 
         - "x86_64"
       Code:
-        S3Bucket: "codepipeline-us-east-1-763954990292"
-        S3Key: !Join ["/", ["cc-hw2-cicd/LambdaArti", "lambda1.zip"]]
+        S3Bucket: !Select [0, !Split [ "/", !Fn::GetArtifactAtt: [LambdaArtifacts, ObjectKey]]]
+        S3Key: !Fn::Sub
+          - "${InputArtifactPrefix}/lambda1.zip"
+          - { InputArtifactPrefix: !Select [1, !Split [ "/", !Fn::GetArtifactAtt: [LambdaArtifacts, ObjectKey]]] }
       MemorySize: 128
       Role: !Sub "arn:aws:iam::${AWS::AccountId}:role/service-role/LF1-role-9stq6gjn"
       Runtime: "python3.9"
