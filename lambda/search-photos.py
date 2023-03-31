@@ -26,7 +26,7 @@ def queryES(keywords):
         # Intersection of all keyword matches
         query["query"] = { 
             "bool": {
-                "must": [{"match": {"labels": keyword}} for keyword in keywords]
+                "should": [{"match": {"labels": keyword}} for keyword in keywords]
                 
             }
         }
