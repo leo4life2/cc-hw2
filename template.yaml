@@ -1,0 +1,261 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Metadata:
+    Generator: "former2"
+Description: ""
+Resources:
+    LambdaFunction:
+        DeletionPolicy: "Retain"
+        Type: "AWS::Lambda::Function"
+        Properties:
+            Description: ""
+            FunctionName: "search-photos"
+            Handler: "lambda_function.lambda_handler"
+            Architectures: 
+              - "x86_64"
+            Code: 
+                S3Bucket: "prod-iad-c1-djusa-tasks"
+                S3Key: !Sub "/snapshots/${AWS::AccountId}/search-photos-7002548c-2047-4dd1-b7da-386db047be0f"
+                S3ObjectVersion: "vwmCJ4wjiJLReII5QoenH7RpeCIxOo6b"
+            MemorySize: 128
+            Role: !Sub "arn:aws:iam::${AWS::AccountId}:role/service-role/search-photos-role-zte24uhw"
+            Runtime: "python3.9"
+            Timeout: 10
+            TracingConfig: 
+                Mode: "PassThrough"
+            VpcConfig: 
+                SubnetIds: 
+                  - "subnet-0367ba89acbe3ff0e"
+                  - "subnet-0b050268d7a5518b4"
+                SecurityGroupIds: 
+                  - "sg-03b48306cd3081ca9"
+            EphemeralStorage: 
+                Size: 512
+
+    LambdaFunction2:
+        DeletionPolicy: "Retain"
+        Type: "AWS::Lambda::Function"
+        Properties:
+            Description: ""
+            FunctionName: "LF1"
+            Handler: "lambda_function.lambda_handler"
+            Architectures: 
+              - "x86_64"
+            Code: 
+                S3Bucket: "prod-iad-c1-djusa-tasks"
+                S3Key: !Sub "/snapshots/${AWS::AccountId}/LF1-bbde95a3-697b-4172-8e44-c6a2848cf668"
+                S3ObjectVersion: "dXwqbYXHggHKaPX1l3wScqgmvsShzQ6k"
+            MemorySize: 128
+            Role: !Sub "arn:aws:iam::${AWS::AccountId}:role/service-role/LF1-role-9stq6gjn"
+            Runtime: "python3.9"
+            Timeout: 10
+            TracingConfig: 
+                Mode: "PassThrough"
+            VpcConfig: 
+                SubnetIds: 
+                  - "subnet-0367ba89acbe3ff0e"
+                  - "subnet-0b050268d7a5518b4"
+                SecurityGroupIds: 
+                  - "sg-03b48306cd3081ca9"
+            EphemeralStorage: 
+                Size: 512
+
+    S3Bucket:
+        DeletionPolicy: "Retain"
+        Type: "AWS::S3::Bucket"
+        Properties:
+            BucketName: "cc-photos-b2"
+            BucketEncryption: 
+                ServerSideEncryptionConfiguration: 
+                  - 
+                    ServerSideEncryptionByDefault: 
+                        SSEAlgorithm: "AES256"
+                    BucketKeyEnabled: true
+            NotificationConfiguration: 
+                LambdaConfigurations: 
+                  - 
+                    Event: "s3:ObjectCreated:Put"
+                    Function: !GetAtt LambdaFunction2.Arn
+
+    S3Bucket2:
+        DeletionPolicy: "Retain"
+        Type: "AWS::S3::Bucket"
+        Properties:
+            BucketName: "cc-photos-frontend"
+            BucketEncryption: 
+                ServerSideEncryptionConfiguration: 
+                  - 
+                    ServerSideEncryptionByDefault: 
+                        SSEAlgorithm: "AES256"
+                    BucketKeyEnabled: true
+            WebsiteConfiguration: 
+                IndexDocument: "chat.html"
+
+    ApiGatewayRestApi:
+        DeletionPolicy: "Retain"
+        Type: "AWS::ApiGateway::RestApi"
+        Properties:
+            Name: "AI Photo Search"
+            Description: "AI Photo Search application, built during the Cloud and Big Data course at Columbia University."
+            ApiKeySourceType: "HEADER"
+            BinaryMediaTypes: 
+              - "image/png"
+              - "image/jpg"
+              - "image/jpeg"
+            EndpointConfiguration: 
+                Types: 
+                  - "REGIONAL"
+
+    ApiGatewayMethod:
+        DeletionPolicy: "Retain"
+        Type: "AWS::ApiGateway::Method"
+        Properties:
+            RestApiId: !Ref ApiGatewayRestApi
+            ResourceId: "gg40j3"
+            HttpMethod: "PUT"
+            AuthorizationType: "NONE"
+            ApiKeyRequired: true
+            OperationName: "uploadPhoto"
+            RequestParameters: 
+                "method.request.header.filename": true
+                "method.request.header.x-amz-meta-customLabels": false
+            MethodResponses: 
+              - 
+                ResponseModels: 
+                    "application/json": "MODEL3df07a"
+                ResponseParameters: 
+                    "method.response.header.Access-Control-Allow-Headers": false
+                    "method.response.header.Access-Control-Allow-Origin": false
+                StatusCode: "200"
+              - 
+                ResponseModels: 
+                    "application/json": "Error"
+                StatusCode: "403"
+              - 
+                ResponseModels: 
+                    "application/json": "Error"
+                StatusCode: "500"
+            Integration: 
+                CacheNamespace: "gg40j3"
+                Credentials: !Sub "arn:aws:iam::${AWS::AccountId}:role/cc-hw2-APIGatewayRole"
+                IntegrationHttpMethod: "PUT"
+                IntegrationResponses: 
+                  - 
+                    ResponseParameters: 
+                        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,filename,x-amz-meta-customLabels'"
+                        "method.response.header.Access-Control-Allow-Origin": "'*'"
+                    SelectionPattern: ""
+                    StatusCode: "200"
+                PassthroughBehavior: "WHEN_NO_MATCH"
+                RequestParameters: 
+                    "integration.request.header.x-amz-meta-customLabels": "method.request.header.x-amz-meta-customLabels"
+                    "integration.request.path.key": "method.request.header.filename"
+                TimeoutInMillis: 29000
+                Type: "AWS"
+                Uri: !Sub "arn:aws:apigateway:${AWS::Region}:s3:path/${S3Bucket}/{key}"
+
+    ApiGatewayMethod2:
+        DeletionPolicy: "Retain"
+        Type: "AWS::ApiGateway::Method"
+        Properties:
+            RestApiId: !Ref ApiGatewayRestApi
+            ResourceId: "xli0he"
+            HttpMethod: "OPTIONS"
+            AuthorizationType: "NONE"
+            ApiKeyRequired: false
+            RequestParameters: {}
+            MethodResponses: 
+              - 
+                ResponseParameters: 
+                    "method.response.header.Access-Control-Allow-Headers": false
+                    "method.response.header.Access-Control-Allow-Methods": false
+                    "method.response.header.Access-Control-Allow-Origin": false
+                StatusCode: "200"
+            Integration: 
+                CacheNamespace: "xli0he"
+                IntegrationResponses: 
+                  - 
+                    ResponseParameters: 
+                        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+                        "method.response.header.Access-Control-Allow-Methods": "'GET,OPTIONS'"
+                        "method.response.header.Access-Control-Allow-Origin": "'*'"
+                    StatusCode: "200"
+                PassthroughBehavior: "WHEN_NO_MATCH"
+                RequestTemplates: 
+                    "application/json": "{\"statusCode\": 200}"
+                TimeoutInMillis: 29000
+                Type: "MOCK"
+
+    ApiGatewayMethod3:
+        DeletionPolicy: "Retain"
+        Type: "AWS::ApiGateway::Method"
+        Properties:
+            RestApiId: !Ref ApiGatewayRestApi
+            ResourceId: "xli0he"
+            HttpMethod: "GET"
+            AuthorizationType: "NONE"
+            ApiKeyRequired: true
+            OperationName: "searchPhotos"
+            RequestParameters: 
+                "method.request.querystring.q": false
+            MethodResponses: 
+              - 
+                ResponseModels: 
+                    "application/json": "SearchResponse"
+                ResponseParameters: 
+                    "method.response.header.Access-Control-Allow-Origin": false
+                StatusCode: "200"
+              - 
+                ResponseModels: 
+                    "application/json": "Error"
+                StatusCode: "403"
+              - 
+                ResponseModels: 
+                    "application/json": "Error"
+                StatusCode: "500"
+            Integration: 
+                CacheNamespace: "xli0he"
+                ContentHandling: "CONVERT_TO_TEXT"
+                IntegrationHttpMethod: "POST"
+                IntegrationResponses: 
+                  - 
+                    ResponseParameters: 
+                        "method.response.header.Access-Control-Allow-Origin": "'*'"
+                    StatusCode: "200"
+                PassthroughBehavior: "WHEN_NO_MATCH"
+                TimeoutInMillis: 29000
+                Type: "AWS_PROXY"
+                Uri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${LambdaFunction}/invocations"
+
+    ApiGatewayMethod4:
+        DeletionPolicy: "Retain"
+        Type: "AWS::ApiGateway::Method"
+        Properties:
+            RestApiId: !Ref ApiGatewayRestApi
+            ResourceId: "gg40j3"
+            HttpMethod: "OPTIONS"
+            AuthorizationType: "NONE"
+            ApiKeyRequired: false
+            RequestParameters: {}
+            MethodResponses: 
+              - 
+                ResponseParameters: 
+                    "method.response.header.Access-Control-Allow-Headers": false
+                    "method.response.header.Access-Control-Allow-Methods": false
+                    "method.response.header.Access-Control-Allow-Origin": false
+                StatusCode: "200"
+            Integration: 
+                CacheNamespace: "gg40j3"
+                IntegrationResponses: 
+                  - 
+                    ResponseParameters: 
+                        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,filename,x-amz-meta-customlabels'"
+                        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,PUT'"
+                        "method.response.header.Access-Control-Allow-Origin": "'*'"
+                    SelectionPattern: ""
+                    StatusCode: "200"
+                PassthroughBehavior: "WHEN_NO_MATCH"
+                RequestTemplates: 
+                    "application/json": "{\"statusCode\": 200}"
+                TimeoutInMillis: 29000
+                Type: "MOCK"
+
