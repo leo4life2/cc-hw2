@@ -1,7 +1,7 @@
 version: 0.2
 
 phases:
-  build:
+  pre_build:
     commands:
       - echo "Zipping lambda1..."
       - cd lambda && zip ../lf1.zip LF1.py && cd ..
@@ -12,3 +12,13 @@ phases:
       - echo "Uploading Lambda zip files to s3..."
       - aws s3 cp lf1.zip s3://cc-photos-lambda/cc-hw2-cicd/lf1.zip
       - aws s3 cp searchphotos.zip s3://cc-photos-lambda/cc-hw2-cicd/searchphotos.zip
+      - INDEX_PHOTO_VERSION_ID=$(aws s3api list-object-versions --bucket cc-photos-lambda --prefix cc-hw2-cicd/lf1.zip --query "Versions[0].VersionId" --output text)
+      - SEARCH_PHOTO_VERSION_ID=$(aws s3api list-object-versions --bucket cc-photos-lambda --prefix cc-hw2-cicd/searchphotos.zip --query "Versions[0].VersionId" --output text)
+      - sed -i "s/{INDEX_PHOTO_VERSION_ID}/$INDEX_PHOTO_VERSION_ID/" template.yaml
+      - sed -i "s/{SEARCH_PHOTO_VERSION_ID}/$SEARCH_PHOTO_VERSION_ID/" template.yaml
+  build:
+    commands:
+      - aws cloudformation package --template-file template.yaml --s3-bucket cc-photos-lambda --output-template-file packaged-template.yaml
+artifacts:
+  files:
+    - packaged-template.yaml
