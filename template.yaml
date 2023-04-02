@@ -9,12 +9,13 @@ Resources:
         Properties:
             Description: ""
             FunctionName: "search-photos"
-            Handler: "search-photos.lambda_handler"
+            Handler: "lambda_function.lambda_handler"
             Architectures: 
               - "x86_64"
             Code: 
-                S3Bucket: "cc-photos-lambda"
-                S3Key: "/cc-hw2-cicd/searchphotos.zip"
+                S3Bucket: "prod-iad-c1-djusa-tasks"
+                S3Key: !Sub "/snapshots/${AWS::AccountId}/search-photos-7002548c-2047-4dd1-b7da-386db047be0f"
+                S3ObjectVersion: "vwmCJ4wjiJLReII5QoenH7RpeCIxOo6b"
             MemorySize: 128
             Role: !Sub "arn:aws:iam::${AWS::AccountId}:role/service-role/search-photos-role-zte24uhw"
             Runtime: "python3.9"
@@ -36,12 +37,13 @@ Resources:
         Properties:
             Description: ""
             FunctionName: "LF1"
-            Handler: "LF1.lambda_handler"
+            Handler: "lambda_function.lambda_handler"
             Architectures: 
               - "x86_64"
             Code: 
-                S3Bucket: "cc-photos-lambda"
-                S3Key: "/cc-hw2-cicd/lf1.zip"
+                S3Bucket: "prod-iad-c1-djusa-tasks"
+                S3Key: !Sub "/snapshots/${AWS::AccountId}/LF1-bbde95a3-697b-4172-8e44-c6a2848cf668"
+                S3ObjectVersion: "dXwqbYXHggHKaPX1l3wScqgmvsShzQ6k"
             MemorySize: 128
             Role: !Sub "arn:aws:iam::${AWS::AccountId}:role/service-role/LF1-role-9stq6gjn"
             Runtime: "python3.9"
