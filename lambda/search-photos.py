@@ -24,6 +24,7 @@ def queryES(keywords):
     
     if keywords:
         # Union of all keyword matches
+        # Demo
         query["query"] = { 
             "bool": {
                 "should": [{"match": {"labels": keyword}} for keyword in keywords]
